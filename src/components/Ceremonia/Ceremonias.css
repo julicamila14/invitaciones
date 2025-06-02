@@ -1,0 +1,69 @@
+.ceremonias-container {
+  border: 1px solid #25415f;
+  padding: 2rem;
+  max-width: 400px;
+  margin: auto;
+  text-align: center;
+  font-family: 'Helvetica Neue', sans-serif;
+  color: #25415f;
+  width: 100%;
+}
+
+.ceremonias-titulo {
+  font-weight: bold;
+  font-family: 'Dancing Script', cursive;
+  border-bottom: 1px solid #25415f;
+  margin-bottom: 2rem;
+  padding: 2rem;
+  font-size: xx-large;
+ animation: heartbeat 1.5s ease-in-out infinite;
+}
+
+@keyframes heartbeat {
+  0%, 100% {
+    transform: scale(1);
+  }
+  50% {
+    transform: scale(1.1);
+  }
+}
+.evento {
+  margin-bottom: 2rem;
+}
+
+.icono img {
+  width: 50px;
+  height: 50px;
+  animation: float 3s ease-in-out infinite;
+  display: flex;
+  justify-content: center;
+  align-items: center;
+}
+
+.icono {
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  flex-direction: column;
+}
+
+.info h3 {
+  margin: 0.5rem 0 0;
+}
+
+.info button {
+  margin-top: 0.5rem;
+  background-color: transparent;
+  border: 1px solid #25415f;
+  color: #25415f;
+  padding: 0.3rem 1rem;
+  cursor: pointer;
+  font-size: 0.9rem;
+}
+
+/* Animación opcional */
+@keyframes float {
+  0%   { transform: translateY(0); }
+  50%  { transform: translateY(-5px); }
+  100% { transform: translateY(0); }
+}

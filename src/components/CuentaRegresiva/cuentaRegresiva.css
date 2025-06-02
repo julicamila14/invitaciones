@@ -1,0 +1,124 @@
+
+.cuenta-container {
+  background-image: url('/png/fondo.svg');
+  background-size: cover;
+  background-repeat: no-repeat;
+  background-position: center;
+  height: 100vh; /* Fijo 100vh, no min-height */
+  max-height: 100vh; /* Evita que crezca */
+  overflow: hidden; /* Evita scroll */
+  display: flex;
+  flex-direction: column;
+  justify-content: center;
+  align-items: center;
+  text-align: center;
+  padding: 1.5rem;
+  color: white;
+}
+
+.cuenta-titulo {
+  font-size: 2.5rem;
+  font-weight: bold;
+  margin-bottom: 1rem;
+  color: #f8f8f8;
+  font-family: 'Dancing Script', cursive;
+}
+
+.cuenta-valores {
+  display: flex;
+  justify-content: center;
+  gap: 1.5rem;
+  color: white;
+  font-size: 1.25rem;
+  font-weight: 600;
+}
+
+.cuenta-caja {
+  background: linear-gradient(135deg, #242424, #130257);
+  border-radius: 0.75rem;
+  padding: 1rem;
+  box-shadow: 0 4px 6px rgba(0, 0, 0, 0.2);
+}
+
+.cuenta-caja p {
+  font-size: 1.875rem;
+  margin: 0;
+}
+
+.galeria-slider {
+  width: 90%;
+  max-width: 1000px;
+  margin: 2rem auto;
+  padding: 0 1rem;
+}
+
+.galeria-slider .slick-slide {
+  display: flex !important;
+  justify-content: center;
+  align-items: center;
+  padding: 0 10px;
+}
+
+.galeria-slider img {
+  width: 100%;
+  height: auto;
+  max-height: 400px;
+  object-fit: cover;
+  border-radius: 1rem;
+  box-shadow: 0 4px 12px rgba(0,0,0,0.5);
+  transition: transform 0.3s ease-in-out;
+}
+
+.galeria-slider img:hover {
+  transform: scale(1.02);
+}
+
+.slick-dots li button:before {
+  color: white;
+}
+
+.slick-prev:before,
+.slick-next:before {
+  color: white;
+  font-size: 30px;
+}
+.galeria {
+  max-width: 600px;
+  margin: 0 auto;
+  overflow: hidden;
+}
+
+/* Asegura que las imágenes ocupen todo el slide sin espacios */
+.galeria img {
+  width: 100%;
+  height: auto;
+  display: block;
+  object-fit: cover;
+}
+@media (max-width: 640px) {
+  .cuenta-container {
+    background-image: url('/png/fondomobile.svg');
+    background-size: contain; /* O ajusta a tu gusto */
+  }
+    .galeria img {
+    width: 100px;
+    height: 100px;
+  }
+}
+@media (min-width: 641px) {
+  .cuenta-caja {
+    width: 100px;
+    min-height: 90px;
+    text-align: center;
+    display: flex;
+    flex-direction: column;
+    justify-content: center;
+    align-items: center;
+  }
+}
+
+@media (max-width: 640px) {
+  .cuenta-valores {
+    flex-direction: column;
+  }
+}

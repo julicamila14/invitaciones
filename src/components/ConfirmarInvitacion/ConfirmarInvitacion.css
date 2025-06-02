@@ -1,0 +1,55 @@
+.confirmacion-container {
+  padding: 2rem;
+  max-width: 700px;
+  margin: auto;
+  font-family: sans-serif;
+  background-color: #f8f8f8f8;
+}
+
+.busqueda {
+  display: flex;
+  gap: 1rem;
+  margin-bottom: 1rem;
+}
+
+.busqueda input {
+  flex: 1;
+  padding: 0.5rem;
+}
+
+.busqueda button {
+  padding: 0.5rem 1rem;
+}
+
+.grilla {
+  width: 100%;
+  border-collapse: collapse;
+  margin-top: 1rem;
+}
+
+.grilla th,
+.grilla td {
+  border: 1px solid #ccc;
+  padding: 0.5rem;
+  text-align: center;
+}
+
+.grilla select {
+  width: 100%;
+  padding: 0.3rem;
+}
+
+.btn-enviar {
+  margin-top: 1rem;
+  padding: 0.6rem 1.2rem;
+  background-color: #25415f;
+  color: white;
+  border: none;
+  cursor: pointer;
+}
+
+.mensaje {
+  color: #ffffff;
+  font-weight: bold;
+  margin-top: 1rem;
+}
