@@ -1,5 +1,5 @@
 specVersion: "v1"
-serviceId: "y"
+serviceId: "invitaciones"
 location: "asia-east1"
 schema:
   source: "./schema"

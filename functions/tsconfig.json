@@ -3,16 +3,17 @@
   "include": [
     "src"
   ],
+ 
   "compilerOptions": {
-    "module": "NodeNext",
-    "noImplicitReturns": true,
+    "module": "commonjs",
+    "moduleResolution": "node",
     "outDir": "lib",
-    "sourceMap": true,
-    "strict": true,
     "target": "es2017",
-    "skipLibCheck": true,
+    "strict": true,
     "esModuleInterop": true,
-    "moduleResolution": "nodenext",
-    "noUnusedLocals": true
-  }
+    "noImplicitReturns": true,
+    "noUnusedLocals": true,
+    "skipLibCheck": true
+  },
+
 }

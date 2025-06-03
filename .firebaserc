@@ -1,0 +1,11 @@
+{
+  "projects": {
+    "default": "casamiento-book"
+  },
+  "targets": {},
+  "etags": {
+    "casamiento-book": {
+      "extensionInstances": {}
+    }
+  }
+}
