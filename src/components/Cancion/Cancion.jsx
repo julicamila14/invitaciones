@@ -16,7 +16,7 @@ const FormularioCancion = () => {
     }
 
     setTimeout(() => {
-      setMensaje(`🎶 ¡Canción enviada con éxito! Gracias, ${nombre}.`);
+      setMensaje(`🎶 ¡Canción enviada con éxito! Gracias, ${nombre}!`);
       setNombre('');
       setCancion('');
       setComentario('');
