@@ -1,5 +1,5 @@
 import React, { useState } from 'react';
-import './FormularioCancion.css';
+import './formularioCancion.css';
 
 const FormularioCancion = () => {
   const [nombre, setNombre] = useState('');
@@ -16,7 +16,7 @@ const FormularioCancion = () => {
     }
 
     setTimeout(() => {
-      setMensaje(`🎶 ¡Canción enviada con éxito! Gracias, ${nombre}!`);
+      setMensaje(`🎶 ¡Canción enviada con éxito! Gracias, ${nombre}.`);
       setNombre('');
       setCancion('');
       setComentario('');
