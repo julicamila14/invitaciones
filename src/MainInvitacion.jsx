@@ -5,6 +5,8 @@ import Ceremonias from './components/Ceremonia/Ceremonias';
 import FormularioCancion from './components/Cancion/Cancion';
 import ConfirmarInvitacion from './components/ConfirmarInvitacion/ConfirmarInvitacion';
 import GaleriaFotos from './components/BookFotos/geleriaFotos';
+import CosasImportantes from './components/CosasImportantes';
+import DressCode from './components/DressCode';
 
 
 function MainInvitacion() {
@@ -17,13 +19,17 @@ function MainInvitacion() {
       <div className="main-ceremonias">
       <Ceremonias/>
       </div>
-      <div>
+      <div className='fondo-cancion'>
         <FormularioCancion/>
       </div>
       <div>
-        <ConfirmarInvitacion/>
+        <DressCode/>
       </div>
-      <div>
+      <div className='fondo-cancion confirmacion-hoja'>
+        <ConfirmarInvitacion className='confirmacion-containe'/>
+
+      </div>
+      <div className='fondo-cancion'>
         <GaleriaFotos/>
       </div>
     </div>

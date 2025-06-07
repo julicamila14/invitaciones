@@ -1,4 +1,8 @@
 .form-cancion-container {
+  background-image: url('/png/form.gif');
+  background-size: cover;
+  background-repeat: no-repeat;
+  background-position: center;
   padding: 2rem;
   color: whitesmoke;
   max-width: 400px;
@@ -6,6 +10,7 @@
   padding: 3rem;
   text-align: center;
   font-family: 'Helvetica Neue', sans-serif;
+
 }
 .titulo-cancion {
  font-weight: bold;
@@ -64,5 +69,8 @@
   justify-content: center;
   align-items: center;
   flex-direction: column;
+  color: whitesmoke;
+}
+.intro {
   color: whitesmoke;
 }
