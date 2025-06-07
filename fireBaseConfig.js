@@ -1,11 +1,8 @@
-// Import the functions you need from the SDKs you need
 import { initializeApp } from "firebase/app";
-import { getAnalytics } from "firebase/analytics";
-// TODO: Add SDKs for Firebase products that you want to use
-// https://firebase.google.com/docs/web/setup#available-libraries
+import { getFirestore, collection, addDoc } from "firebase/firestore";
+import { getStorage, ref, uploadBytes, getDownloadURL } from "firebase/storage";
+import { getAuth } from "firebase/auth";   // <--- importa getAuth
 
-// Your web app's Firebase configuration
-// For Firebase JS SDK v7.20.0 and later, measurementId is optional
 const firebaseConfig = {
   apiKey: "AIzaSyCeGJY1odD_srFk3c8xyAjHbA79ppRUg9k",
   authDomain: "casamiento-book.firebaseapp.com",
@@ -17,6 +14,25 @@ const firebaseConfig = {
   measurementId: "G-PL50F8FCHY"
 };
 
-// Initialize Firebase
 const app = initializeApp(firebaseConfig);
-const analytics = getAnalytics(app);
+
+export const db = getFirestore(app);
+export const storage = getStorage(app);
+export const auth = getAuth(app);
+
+// Funciones para usar en tu app:
+export const agregarInvitado = (invitado) =>
+  addDoc(collection(db, "invitados"), invitado);
+
+export const agregarCancion = (cancion) =>
+  addDoc(collection(db, "canciones"), cancion);
+
+export const subirFoto = async (file) => {
+  const storageRef = ref(storage, `fotos/${file.name}`);
+  await uploadBytes(storageRef, file);
+  return await getDownloadURL(storageRef);
+};
+
+export const obtenerFotos = async () => {
+  // ...
+};

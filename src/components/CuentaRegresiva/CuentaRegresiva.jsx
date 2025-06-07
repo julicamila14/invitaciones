@@ -48,10 +48,10 @@ const CuentaRegresiva = ({ fechaObjetivo }) => {
     <div className="cuenta-container">
       <h2 className="cuenta-titulo">¡Nos casamos!</h2>
       <div className="cuenta-valores">
-        <div className="cuenta-caja"><p>{tiempo.dias}</p><span>Días</span></div>
-        <div className="cuenta-caja"><p>{tiempo.horas}</p><span>Horas</span></div>
-        <div className="cuenta-caja"><p>{tiempo.minutos}</p><span>Minutos</span></div>
-        <div className="cuenta-caja"><p>{tiempo.segundos}</p><span>Segundos</span></div>
+        <div className="cuenta-caja"><p className='numero-container-p'>{tiempo.dias}</p><span>Días</span></div>
+        <div className="cuenta-caja"><p className='numero-container-p'>{tiempo.horas}</p><span>Horas</span></div>
+        <div className="cuenta-caja"><p className='numero-container-p'>{tiempo.minutos}</p><span>Minutos</span></div>
+        <div className="cuenta-caja"><p className='numero-container-p'>{tiempo.segundos}</p><span>Segundos</span></div>
       </div>
 
       <div className="galeria-slider">

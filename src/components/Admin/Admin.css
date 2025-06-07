@@ -1,0 +1,120 @@
+
+body {
+  margin: 0;
+  padding: 0;
+}
+
+
+.admin-container {
+  width: 90%;
+  max-width: 1200px;
+  margin: 2rem auto;
+  padding: 2rem;
+  background-image: url('/png/fondo.gif'); 
+  background-size: cover;
+  background-position: center;
+  background-repeat: no-repeat;
+  border-radius: 12px;
+  box-shadow: 0 2px 8px rgba(0, 0, 50, 0.1);
+  font-family: 'Segoe UI', sans-serif;
+
+}
+
+.admin-container h1 {
+  color: #f8f8f8; /* Azul marino */
+  margin-bottom: 1rem;
+}
+
+.mensaje {
+  font-weight: bold;
+  text-align: center;
+  color: #f8f8f8;
+  margin-bottom: 1rem;
+}
+
+.form-agregar {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 1rem;
+  margin-bottom: 2rem;
+  align-items: center;
+}
+
+.form-agregar input,
+.form-agregar select {
+  padding: 0.5rem;
+  font-size: 1rem;
+  border: 1px solid #ccc;
+  border-radius: 6px;
+  min-width: 150px;
+}
+
+.admin-button {
+  background-color: #f8f8f8; /* Azul marino */
+  color: #08325d;
+  border: none;
+  padding: 0.6rem 1.2rem;
+  font-size: 1rem;
+  cursor: pointer;
+  border-radius: 8px;
+  transition: background-color 0.3s ease;
+}
+
+.admin-button:hover {
+  background-color: #08325d;
+}
+
+.admin-table-container {
+  overflow-x: auto;
+  margin-bottom: 2rem;
+}
+
+.admin-table {
+  width: 100%;
+  border-collapse: collapse;
+  margin-bottom: 1rem;
+}
+
+.admin-table th,
+.admin-table td {
+  padding: 0.75rem;
+  border: 1px solid #dcdcdc;
+  text-align: left;
+}
+
+.admin-table th {
+  background-color: #102136; /* Azul marino */
+  color: white;
+}
+
+.admin-table td input,
+.admin-table td select {
+  width: 100%;
+  padding: 0.4rem;
+  font-size: 0.95rem;
+  border: 1px solid #ccc;
+  border-radius: 4px;
+}
+
+.icon-button {
+  background: none;
+  border: none;
+  cursor: pointer;
+  margin-right: 0.5rem;
+  font-size: 1.1rem;
+}
+
+.icon-button svg {
+  color: #0a2f5c; /* Azul marino para íconos normales */
+}
+
+.delete-button svg {
+  color: #c0392b; /* Rojo para eliminar */
+}
+
+@media (max-width: 768px) {
+  .form-agregar {
+    flex-direction: column;
+    align-items: stretch;
+  }
+}

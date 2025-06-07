@@ -1,57 +1,92 @@
 import React, { useState, useEffect } from 'react';
+import { auth } from '../../../fireBaseConfig';
+import { onAuthStateChanged, signOut } from 'firebase/auth';
+import Login from '../../Login/Login';
 import './Menu.css';
 
 function Navbar() {
   const [isOpen, setIsOpen] = useState(false);
   const [isMobile, setIsMobile] = useState(false);
+  const [user, setUser] = useState(null);
+  const [showLogin, setShowLogin] = useState(false);
 
   useEffect(() => {
-    const handleResize = () => {
-      setIsMobile(window.innerWidth < 768); // Define el ancho del breakpoint para móvil
-    };
+  const handleResize = () => {
+    setIsMobile(window.innerWidth < 768);
+  };
+  handleResize();
+  window.addEventListener('resize', handleResize);
 
-    handleResize(); // Verifica el tamaño inicial
-    window.addEventListener('resize', handleResize);
-    return () => window.removeEventListener('resize', handleResize);
-  }, []);
+  const unsubscribe = onAuthStateChanged(auth, (user) => {
+    setUser(user);
+    if (user) {
+      setShowLogin(false);
+    }
+  });
 
-  const toggleMenu = () => {
-    setIsOpen(!isOpen);
+  return () => {
+    window.removeEventListener('resize', handleResize);
+    unsubscribe();
+  };
+}, []);
+
+  const toggleMenu = () => setIsOpen(!isOpen);
+
+  const handleLogout = async () => {
+    await signOut(auth);
+    setIsOpen(false);
+    setShowLogin(false);
+  }
+
+  const handleShowLogin = () => {
+    setShowLogin(true);
+    setIsOpen(false);
+  };
+
+  const goToAdmin = () => {
+    setIsOpen(false);
+    window.location.href = '/admin';
   };
 
   return (
-    <nav className="navbar">
-      <div className="navbar-brand">F + J
-        <img
-          src="/favicon.ico"
-          alt="Logo"
-          style={{ height: '100%', maxHeight: '40px', width: 'auto' }}
-        />
-      </div>
+    <>
+      <nav className="navbar">
+        <div className="navbar-brand">
+          <img
+            src="/png/Menu.gif"
+            alt="Logo"
+            style={{ height: '100%', maxHeight: '60px', width: 'auto' }}
+          />
+        </div>
 
-      {/* Botón de menú hamburguesa (solo en móvil) */}
-      {isMobile && (
-        <button
-          className="menu-toggle"
-          onClick={toggleMenu}
-          aria-label="Abrir menú"
-        >
-          {isOpen ? '✕' : '☰'} {/* Muestra "Menú ✕" o el menú */}
-        </button>
-      )}
+        {isMobile && (
+          <button className="menu-toggle" onClick={toggleMenu} aria-label="Abrir menú">
+            {isOpen ? '✕' : '☰'}
+          </button>
+        )}
 
-      {/* Contenedor del menú */}
-      <div className={`nav-menu ${isOpen ? 'open' : ''}`}>
-        {/* Enlaces de navegación */}
-        <ul className="nav-links">
-          <li><a href="#inicio" onClick={toggleMenu}>Inicio</a></li>
-          <li><a href="#eventos" onClick={toggleMenu}>Ceremonias</a></li>
-          <li><a href="#rsvp" onClick={toggleMenu}>Confirmar asistencia</a></li>
-          <li><a href="#cancion" onClick={toggleMenu}>Sugerir canción</a></li>
-          <li><a href="#book" onClick={toggleMenu}>Book de fotos</a></li>
-        </ul>
-      </div>
-    </nav>
+        <div className={`nav-menu ${isOpen ? 'open' : ''}`}>
+          <ul className="nav-links">
+            <li><a href="#inicio" onClick={toggleMenu}>Inicio</a></li>
+            <li><a href="#eventos" onClick={toggleMenu}>Ceremonias</a></li>
+            <li><a href="#rsvp" onClick={toggleMenu}>Confirmar asistencia</a></li>
+            <li><a href="#cancion" onClick={toggleMenu}>Sugerir canción</a></li>
+            <li><a href="#book" onClick={toggleMenu}>Book de fotos</a></li>
+
+            {user ? (
+              <>
+                <li><a onClick={handleLogout}>Cerrar sesión</a></li>
+                <li><a onClick={goToAdmin}>Admin</a></li> 
+             </>
+            ) : (
+              <li><a onClick={handleShowLogin}>Iniciar sesión</a></li>
+            )}
+          </ul>
+        </div>
+      </nav>
+
+      {showLogin && <Login />}
+    </>
   );
 }
 

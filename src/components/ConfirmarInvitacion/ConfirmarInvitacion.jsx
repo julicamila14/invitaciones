@@ -1,11 +1,7 @@
 import React, { useState } from 'react';
+import { collection, getDocs, updateDoc, doc } from 'firebase/firestore';
+import { db } from '../../../fireBaseConfig';
 import './ConfirmarInvitacion.css';
-
-const invitadosMock = [
-  { id: 1, nombre: 'Juan', apellido: 'Pérez' },
-  { id: 2, nombre: 'Ana', apellido: 'González' },
-  { id: 3, nombre: 'Lucía', apellido: 'Martínez' },
-];
 
 const estados = ['Sin confirmar', 'Confirmado', 'No asistiré'];
 const comidas = ['No necesita', 'Vegano', 'Sin TACC', 'Vegetariano'];
@@ -14,14 +10,24 @@ const ConfirmarInvitacion = () => {
   const [busqueda, setBusqueda] = useState('');
   const [resultados, setResultados] = useState([]);
   const [mensaje, setMensaje] = useState('');
+  const [modalVisible, setModalVisible] = useState(false);
+  const [modalMensaje, setModalMensaje] = useState('');
+  const [modalTipo, setModalTipo] = useState('exito');
 
-  const handleBuscar = () => {
-    const encontrados = invitadosMock.filter((i) =>
-      `${i.nombre} ${i.apellido}`.toLowerCase().includes(busqueda.toLowerCase())
-    ).map(i => ({
+  const handleBuscar = async () => {
+    const invitadosRef = collection(db, 'invitados');
+    const snapshot = await getDocs(invitadosRef);
+
+    const encontrados = snapshot.docs
+      .map((docSnap) => ({ id: docSnap.id, ...docSnap.data() }))
+      .filter((i) =>
+        `${i.nombre} ${i.apellido}`.toLowerCase().includes(busqueda.toLowerCase())
+      )
+      .map((i) => ({
       ...i,
-      estado: 'Sin confirmar',
-      comida: 'No necesita',
+      estado: estados.includes(i.estado) ? i.estado : 'Sin confirmar',
+      comida: comidas.includes(i.comida) ? i.comida : 'No necesita',
+      confirmado: i.confirmado || 0,
     }));
 
     setResultados(encontrados);
@@ -34,11 +40,34 @@ const ConfirmarInvitacion = () => {
     );
   };
 
-  const handleEnviar = () => {
-    // Simula un envío
-    setMensaje('✅ Confirmación enviada. ¡Gracias!');
-    console.log('Invitados confirmados:', resultados);
-  };
+const handleEnviar = async () => {
+  try {
+    for (const inv of resultados) {
+      await updateDoc(doc(db, 'invitados', inv.id), {
+        estado: inv.estado,
+        comida: inv.comida,
+        confirmado: 1
+      });
+    }
+    await handleBuscar();
+    mostrarModalExito('✅ Confirmación enviada. ¡Gracias!');
+  } catch (error) {
+    console.error('Error actualizando invitados:', error);
+    mostrarModalError('❌ Hubo un error al enviar la confirmación.');
+  }
+};
+
+ const mostrarModalExito = (mensaje) => {
+  setModalMensaje(mensaje);
+  setModalTipo('exito');
+  setModalVisible(true);
+};
+
+const mostrarModalError = (mensaje) => {
+  setModalMensaje(mensaje);
+  setModalTipo('error');
+  setModalVisible(true);
+};
 
   return (
     <section className="confirmacion-container">
@@ -76,6 +105,7 @@ const ConfirmarInvitacion = () => {
                     onChange={(e) =>
                       actualizarCampo(invitado.id, 'estado', e.target.value)
                     }
+                    disabled={invitado.confirmado === 1}
                   >
                     {estados.map((estado) => (
                       <option key={estado} value={estado}>{estado}</option>
@@ -88,6 +118,7 @@ const ConfirmarInvitacion = () => {
                     onChange={(e) =>
                       actualizarCampo(invitado.id, 'comida', e.target.value)
                     }
+                    disabled={invitado.confirmado === 1}
                   >
                     {comidas.map((opcion) => (
                       <option key={opcion} value={opcion}>{opcion}</option>
@@ -100,10 +131,17 @@ const ConfirmarInvitacion = () => {
         </table>
       )}
 
-      {resultados.length > 0 && (
-        <button className="btn-enviar" onClick={handleEnviar}>
-          Enviar confirmación
-        </button>
+      {resultados.length > 0 && !resultados.every(inv => inv.confirmado === 1) && (
+      <button className="btn-enviar" onClick={handleEnviar}>
+        Enviar confirmación
+      </button>
+    )}
+      {modalVisible && (
+        <Modal
+          mensaje={modalMensaje}
+          tipo={modalTipo}
+          onClose={() => setModalVisible(false)}
+        />
       )}
     </section>
   );
