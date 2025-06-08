@@ -1,5 +1,5 @@
 import { initializeApp } from "firebase/app";
-import { getFirestore, collection, addDoc } from "firebase/firestore";
+import { getFirestore, collection, addDoc, serverTimestamp } from "firebase/firestore";
 import { getStorage, ref, uploadBytes, getDownloadURL } from "firebase/storage";
 import { getAuth } from "firebase/auth";   // <--- importa getAuth
 
@@ -31,6 +31,17 @@ export const subirFoto = async (file) => {
   const storageRef = ref(storage, `fotos/${file.name}`);
   await uploadBytes(storageRef, file);
   return await getDownloadURL(storageRef);
+};
+
+ export const registrarAcceso = async (email) => {
+  try {
+    await addDoc(collection(db, "registrosAccesos"), {
+      email,
+      fechaHora: serverTimestamp(),
+    });
+  } catch (error) {
+    console.error("Error al registrar el acceso en Firestore:", error);
+  }
 };
 
 export const obtenerFotos = async () => {

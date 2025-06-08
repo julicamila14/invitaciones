@@ -1,0 +1,190 @@
+.container-email {
+  max-width: 420px;
+  margin: 40px auto;
+  padding: 30px 25px;
+  background: linear-gradient(-45deg, #202d45, #5b78c0, #3d4f7c, #202d45);
+  background-size: 400% 400%;
+  animation: email-gradient 12s ease infinite;
+  border-radius: 20px;
+  box-shadow: 0 8px 25px rgba(0, 0, 0, 0.2);
+  text-align: center;
+  font-family: 'Segoe UI', sans-serif;
+  color: #ffffff;
+  position: relative;
+  z-index: 1;
+  animation: fadeSlideIn 0.8s ease-in-out;
+}
+
+@keyframes email-gradient {
+  0% { background-position: 0% 50%; }
+  50% { background-position: 100% 50%; }
+  100% { background-position: 0% 50%; }
+}
+
+@keyframes fadeSlideIn {
+  from {
+    opacity: 0;
+    transform: translateY(20px);
+  }
+  to {
+    opacity: 1;
+    transform: translateY(0);
+  }
+}
+
+.title {
+  font-size: 30px;
+  margin-bottom: 10px;
+  color: #ffffff;
+}
+
+.emoji-wave {
+  display: inline-block;
+  animation: wave 1.6s infinite;
+  transform-origin: 70% 70%;
+}
+
+@keyframes wave {
+  0% { transform: rotate(0deg); }
+  10% { transform: rotate(14deg); }
+  20% { transform: rotate(-8deg); }
+  30% { transform: rotate(14deg); }
+  40% { transform: rotate(-4deg); }
+  50% { transform: rotate(10deg); }
+  60% { transform: rotate(0deg); }
+  100% { transform: rotate(0deg); }
+}
+
+.subtitle {
+  font-size: 16px;
+  margin-bottom: 18px;
+  color: #cfd8dc;
+}
+
+.input-verificacion {
+  width: 100%;
+  padding: 14px;
+  margin-top: 10px;
+  margin-bottom: 16px; /* espacio suficiente para el botón */
+  border: 1px solid #90a4ae;
+  border-radius: 12px;
+  font-size: 16px;
+  background-color: #ffffff;
+  color: #202d45;
+  transition: box-shadow 0.3s ease;
+}
+
+.input-verificacion:focus {
+  outline: none;
+  box-shadow: 0 0 8px rgba(144, 202, 249, 0.5);
+}
+
+.boton-enviar {
+  background-color: #feffff; /* azul moderno y suave */
+  border: 2px solid #e6e2ff; /* borde un poco más oscuro */
+  color: #202d45;
+  padding: 10px 18px;
+  font-weight: 600;
+  font-size: 16px;
+  border-radius: 10px;
+  box-shadow: 0 3px 8px rgba(74, 144, 226, 0.5);
+  transition: background 0.3s ease, transform 0.2s ease, box-shadow 0.3s ease;
+  cursor: pointer;
+  display: inline-block;
+  margin: 12px auto 0;
+  min-width: auto;
+  width: auto;
+  max-width: 100%;
+  white-space: nowrap;
+}
+
+.boton-enviar:hover {
+  background-color: #357abd; /* azul más oscuro al hover */
+  box-shadow: 0 5px 12px rgba(63, 47, 135, 0.7);
+}
+
+.boton-enviar:active {
+  transform: scale(0.97);
+  box-shadow: 0 2px 6px rgba(134, 140, 245, 0.4);
+}
+
+.boton-enviar:disabled {
+  background-color: #a9c9f5;
+  border-color: #a9c9f5;
+  color: #eee;
+  cursor: not-allowed;
+  box-shadow: none;
+}
+
+.mensaje {
+  margin-top: 20px;
+  font-size: 15px;
+  color: #e3f2fd;
+  animation: fadeIn 1s ease-in-out;
+}
+
+.fade-in {
+  animation: fadeIn 0.7s ease-in-out;
+}
+
+@keyframes fadeIn {
+  from { opacity: 0; transform: translateY(12px); }
+  to   { opacity: 1; transform: translateY(0); }
+}
+
+/* Responsive */
+@media (max-width: 480px) {
+  .container-email {
+    margin: 20px 10px;
+    padding: 25px 18px;
+  }
+
+  .title {
+    font-size: 26px;
+  }
+
+  input, button {
+    font-size: 15px;
+    padding: 12px;
+  }
+}
+
+/* 🚀 Emoji que tiembla */
+.emoji-shake {
+  display: inline-block;
+  animation: shake 0.7s infinite;
+  transform-origin: center;
+}
+
+@keyframes shake {
+  0% { transform: rotate(0deg); }
+  20% { transform: rotate(8deg); }
+  40% { transform: rotate(-6deg); }
+  60% { transform: rotate(5deg); }
+  80% { transform: rotate(-3deg); }
+  100% { transform: rotate(0deg); }
+}
+
+.boton-animado {
+  animation: pulse 2s infinite;
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  gap: 8px;
+}
+
+@keyframes pulse {
+  0% { transform: scale(1); box-shadow: 0 0 0 0 rgba(174, 174, 255, 0.6); }
+  70% { transform: scale(1.05); box-shadow: 0 0 0 10px rgba(67, 160, 71, 0); }
+  100% { transform: scale(1); box-shadow: 0 0 0 0 rgba(67, 160, 71, 0); }
+}
+
+.container-email {
+ animation: email-gradient 12s ease infinite,  pulseSmooth 3s ease-in-out infinite;
+animation: pulseSmooth 3s ease-in-out infinite;  
+}
+
+@keyframes pulseSmooth {
+  0%, 100% { transform: scale(1); }
+  50% { transform: scale(1.05); }
+}

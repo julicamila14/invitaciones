@@ -6,6 +6,7 @@ import { auth } from '../fireBaseConfig';
 import Login from './Login/Login';
 import MainInvitacion from './MainInvitacion';
 import Admin from './components/Admin/Admin';
+import EmailVerification from './Email/email';
 
 function App() {
   const [user, setUser] = useState(undefined);
@@ -22,7 +23,8 @@ function App() {
   return (
     <BrowserRouter>
       <Routes>
-        <Route path="/" element={<MainInvitacion />} />
+        <Route path="/" element={<EmailVerification />} />
+        <Route path="/invitacion" element={<MainInvitacion />} />
         <Route path="/login" element={<Login />} />
         <Route path="/admin" element={user ? <Admin /> : <Navigate to="/login" />} />
       </Routes>
