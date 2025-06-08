@@ -101,7 +101,7 @@ export default function Admin() {
         {mensaje && <p className="mensaje">{mensaje}</p>}
 
         {/* Invitados */}
-        <h2>Invitados</h2>
+        <h2 className='titulo-admin'>Invitados</h2>
         <form onSubmit={handleAgregar} className="form-agregar">
           <input
             type="text"
@@ -177,9 +177,9 @@ export default function Admin() {
             </tbody>
           </table>
           <div className="paginacion">
-            <button disabled={pagInv===1} onClick={()=>setPagInv(p=>p-1)}>Anterior</button>
-            <span>Página {pagInv}</span>
-            <button disabled={pagInv>= Math.ceil(invitados.length/filasPorPagina)} onClick={()=> setPagInv(p=>p+1)}>Siguiente</button>
+            <button className="admin-button" disabled={pagInv===1} onClick={()=>setPagInv(p=>p-1)}>Anterior</button>
+            <span  className='titulo-admin'>Página {pagInv}</span>
+            <button  className="admin-button" disabled={pagInv>= Math.ceil(invitados.length/filasPorPagina)} onClick={()=> setPagInv(p=>p+1)}>Siguiente</button>
           </div>
         </div>
         <button className="admin-button" onClick={()=>exportToExcel(invitados,"invitados.xlsx")}>
@@ -187,7 +187,7 @@ export default function Admin() {
         </button>
 
         {/* Canciones */}
-        <h2>Canciones</h2>
+        <h2  className='titulo-admin'>Canciones</h2>
         <div className="admin-table-container">
           <table className="admin-table">
             <thead>
@@ -200,9 +200,9 @@ export default function Admin() {
             </tbody>
           </table>
           <div className="paginacion">
-            <button disabled={pagCan===1} onClick={()=>setPagCan(p=>p-1)}>Anterior</button>
-            <span>Página {pagCan}</span>
-            <button disabled={pagCan>= Math.ceil(canciones.length/filasPorPagina)} onClick={()=> setPagCan(p=>p+1)}>Siguiente</button>
+            <button  className="admin-button" disabled={pagCan===1} onClick={()=>setPagCan(p=>p-1)}>Anterior</button>
+            <span  className='titulo-admin'>Página {pagCan}</span>
+            <button  className="admin-button" disabled={pagCan>= Math.ceil(canciones.length/filasPorPagina)} onClick={()=> setPagCan(p=>p+1)}>Siguiente</button>
           </div>
         </div>
         <button className="admin-button" onClick={()=>exportToExcel(canciones,"canciones.xlsx")}>
@@ -210,7 +210,7 @@ export default function Admin() {
         </button>
 
         {/* Visitas */}
-        <h2>Visitas</h2>
+        <h2  className='titulo-admin'>Visitas</h2>
         <div className="admin-table-container">
           <table className="admin-table">
             <thead><tr><th>Email</th><th>Fecha y Hora</th></tr></thead>
@@ -220,10 +220,10 @@ export default function Admin() {
               ))}
             </tbody>
           </table>
-          <div className="paginacion">
-            <button disabled={pagVis===1} onClick={()=>setPagVis(p=>p-1)}>Anterior</button>
-            <span>Página {pagVis}</span>
-            <button disabled={pagVis>= Math.ceil(visitas.length/filasPorPagina)} onClick={()=> setPagVis(p=>p+1)}>Siguiente</button>
+          <div  className="paginacion">
+            <button  className="admin-button" disabled={pagVis===1} onClick={()=>setPagVis(p=>p-1)}>Anterior</button>
+            <span  className='titulo-admin'>Página {pagVis}</span>
+            <button  className="admin-button" disabled={pagVis>= Math.ceil(visitas.length/filasPorPagina)} onClick={()=> setPagVis(p=>p+1)}>Siguiente</button>
           </div>
         </div>
         <button className="admin-button" onClick={()=>exportToExcel(visitas,"visitas.xlsx")}>
