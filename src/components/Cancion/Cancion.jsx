@@ -54,7 +54,7 @@ const FormularioCancion = () => {
         />
         <input
           type="text"
-          placeholder="Nombre de la canción o artista"
+          placeholder="Nombre de la canción y artista"
           value={cancion}
           onChange={(e) => setCancion(e.target.value)}
         />

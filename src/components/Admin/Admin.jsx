@@ -67,6 +67,12 @@ export default function Admin() {
     fetchData();
   };
 
+  const eliminarCancion = async (id) => {
+  await deleteDoc(doc(db, "canciones", id));
+  setMensaje('✅ Canción eliminada.');
+  setTimeout(() => setMensaje(''), 3000);
+  fetchData();
+};
   const handleAgregar = async e => {
     e.preventDefault();
     const nm = nuevoInvitado.nombre.trim().toUpperCase();
@@ -196,17 +202,23 @@ export default function Admin() {
                 <th>Canción</th>
                 <th>Comentario</th>
                 <th>Fecha y Hora</th>
+                <th>Acción</th> 
               </tr>
             </thead>
             <tbody>
               {canciones
                 .slice((pagCan - 1) * filasPorPagina, pagCan * filasPorPagina)
                 .map((c, i) => (
-                  <tr key={i}>
+                  <tr key={c.id}>
                     <td>{c.nombre}</td>
                     <td>{c.cancion}</td>
                     <td>{c.comentario}</td>
-                    <td>{c.fechaHora ? new Date(c.fechaHora).toLocaleString() : 'Sin fecha'}</td>
+                    <td>{c.fechaHora ? c.fechaHora.toDate().toLocaleString() : 'Sin fecha'}</td>
+                    <td>
+                      <button onClick={() => eliminarCancion(c.id)} className="icon-button delete-button">
+                        <FontAwesomeIcon icon={faTrash} />
+                      </button>
+                    </td>
                   </tr>
                 ))}
             </tbody>
