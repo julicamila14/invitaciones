@@ -4,12 +4,11 @@ import {
   getDocs,
   updateDoc,
   doc,
-  deleteDoc
+  deleteDoc, query, orderBy 
 } from "firebase/firestore";
 import * as XLSX from 'xlsx';
 import Navbar from '../Menu/Menu';
 import { db } from '../../../fireBaseConfig';
-import { registrarAcceso } from '../../../fireBaseConfig';
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
 import { faTrash, faSave } from '@fortawesome/free-solid-svg-icons';
 import './Admin.css';
@@ -36,18 +35,23 @@ export default function Admin() {
   const [pagVis, setPagVis] = useState(1);
 
   const fetchData = async () => {
-    const [ins, cs, vs] = await Promise.all([
-      getDocs(collection(db, "invitados")),
-      getDocs(collection(db, "canciones")),
-      getDocs(collection(db, "registrosAccesos"))
-    ]);
-    setInvitados(ins.docs.map(d => ({ id: d.id, ...d.data() })));
-    setCanciones(cs.docs.map(d => d.data()));
-    setVisitas(vs.docs.map(d => ({
-      email: d.data().email,
-      fechahora: d.data().fechaHora?.toDate?.()?.toISOString() ?? 'Sin fecha'
-    })));
-  };
+  const invitadosQuery = query(collection(db, "invitados"), orderBy("apellido", "asc"));
+  const cancionesQuery = query(collection(db, "canciones"), orderBy("fechaHora", "desc"));
+  const visitasQuery = query(collection(db, "registrosAccesos"), orderBy("fechaHora", "desc"));
+
+  const [ins, cs, vs] = await Promise.all([
+    getDocs(invitadosQuery),
+    getDocs(cancionesQuery),
+    getDocs(visitasQuery)
+  ]);
+
+  setInvitados(ins.docs.map(d => ({ id: d.id, ...d.data() })));
+  setCanciones(cs.docs.map(d => ({ id: d.id, ...d.data() })));
+  setVisitas(vs.docs.map(d => ({
+    email: d.data().email,
+    fechahora: d.data().fechaHora?.toDate?.()?.toISOString() ?? 'Sin fecha'
+  })));
+};
 
   useEffect(() => {
     fetchData();
@@ -111,15 +115,15 @@ export default function Admin() {
         <form onSubmit={handleAgregar} className="form-agregar">
           <input
             type="text"
-            placeholder="Nombre"
-            value={nuevoInvitado.nombre}
-            onChange={e => setNuevoInvitado({ ...nuevoInvitado, nombre: e.target.value })}
-          />
-          <input
-            type="text"
             placeholder="Apellido"
             value={nuevoInvitado.apellido}
             onChange={e => setNuevoInvitado({ ...nuevoInvitado, apellido: e.target.value })}
+          />
+           <input
+            type="text"
+            placeholder="Nombre"
+            value={nuevoInvitado.nombre}
+            onChange={e => setNuevoInvitado({ ...nuevoInvitado, nombre: e.target.value })}
           />
           <select
             value={nuevoInvitado.estado}
@@ -240,7 +244,7 @@ export default function Admin() {
             <thead><tr><th>Email</th><th>Fecha y Hora</th></tr></thead>
             <tbody>
               {visitas.slice((pagVis-1)*filasPorPagina, pagVis*filasPorPagina).map((v,i)=>(
-                <tr key={i}><td>{v.email}</td><td>{new Date(v.fechahora).toLocaleString()}</td></tr>
+                  <tr key={`${v.email}-${v.fechahora}`}><td>{v.email}</td><td>{new Date(v.fechahora).toLocaleString()}</td></tr>
               ))}
             </tbody>
           </table>
