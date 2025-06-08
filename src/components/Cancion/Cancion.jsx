@@ -1,5 +1,6 @@
 import React, { useState } from 'react';
 import './formularioCancion.css';
+import { agregarCancion } from '../../../fireBaseConfig';
 
 const FormularioCancion = () => {
   const [nombre, setNombre] = useState('');
@@ -7,7 +8,7 @@ const FormularioCancion = () => {
   const [comentario, setComentario] = useState('');
   const [mensaje, setMensaje] = useState('');
 
-  const handleSubmit = (e) => {
+  const handleSubmit = async (e) => {
     e.preventDefault();
 
     if (!nombre || !cancion) {
@@ -15,19 +16,29 @@ const FormularioCancion = () => {
       return;
     }
 
-    setTimeout(() => {
+    try {
+      await agregarCancion({
+        nombre,
+        cancion,
+        comentario,
+        fechaHora: new Date()
+      });
+
       setMensaje(`🎶 ¡Canción enviada con éxito! Gracias, ${nombre}.`);
       setNombre('');
       setCancion('');
       setComentario('');
-    }, 500);
+    } catch (error) {
+      console.error('Error al guardar canción:', error);
+      setMensaje('❌ Hubo un error al guardar la canción. Intentá de nuevo.');
+    }
   };
 
   return (
     <section className="form-cancion-container">
-        <div className="icono">
-            <img src="/icons/cancion.gif" alt="Ceremonia" />
-        </div>
+      <div className="icono">
+        <img src="/icons/cancion.gif" alt="Ceremonia" />
+      </div>
       <h1 className='titulo-cancion'> Sugerí una Canción</h1>
       <p className="intro">
         Nos encantaría que nos ayudes a armar la playlist de la fiesta. <br />

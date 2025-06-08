@@ -16,8 +16,7 @@ body {
   background-repeat: no-repeat;
   border-radius: 12px;
   box-shadow: 0 2px 8px rgba(0, 0, 50, 0.1);
-  font-family: 'Segoe UI', sans-serif;
-
+  font-family: 'Segoe UI', sans-serif !important;
 }
 
 .admin-container h1 {

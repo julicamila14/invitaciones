@@ -1,18 +1,26 @@
 import React, { useEffect, useState } from 'react';
-import { collection, addDoc, getDocs, updateDoc, doc, deleteDoc } from "firebase/firestore";
+import {
+  collection,
+  getDocs,
+  updateDoc,
+  doc,
+  deleteDoc
+} from "firebase/firestore";
 import * as XLSX from 'xlsx';
 import Navbar from '../Menu/Menu';
 import { db } from '../../../fireBaseConfig';
+import { registrarAcceso } from '../../../fireBaseConfig';
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
 import { faTrash, faSave } from '@fortawesome/free-solid-svg-icons';
-import "./Admin.css"
+import './Admin.css';
 
 const estados = ['Sin confirmar', 'Confirmado', 'No asistiré'];
 const comidas = ['No necesita', 'Vegano', 'Sin TACC', 'Vegetariano'];
 
-function Admin() {
+export default function Admin() {
   const [invitados, setInvitados] = useState([]);
   const [canciones, setCanciones] = useState([]);
+  const [visitas, setVisitas] = useState([]);
   const [nuevoInvitado, setNuevoInvitado] = useState({
     nombre: '',
     apellido: '',
@@ -22,146 +30,102 @@ function Admin() {
   });
   const [mensaje, setMensaje] = useState('');
 
+  const filasPorPagina = 10;
+  const [pagInv, setPagInv] = useState(1);
+  const [pagCan, setPagCan] = useState(1);
+  const [pagVis, setPagVis] = useState(1);
+
   const fetchData = async () => {
-    const invitadosSnapshot = await getDocs(collection(db, "invitados"));
-    const cancionesSnapshot = await getDocs(collection(db, "canciones"));
-
-    setInvitados(invitadosSnapshot.docs.map(docSnap => {
-    const data = docSnap.data();
-    return {
-        id: docSnap.id,
-        nombre: data.nombre || '',
-        apellido: data.apellido || '',
-        estado: estados.includes(data.estado) ? data.estado : 'Sin confirmar',
-        comida: comidas.includes(data.comida) ? data.comida : 'No necesita',
-        confirmado: typeof data.confirmado === 'number' ? data.confirmado : 0
-    };
-    }));
-
-    setCanciones(cancionesSnapshot.docs.map(doc => doc.data()));
+    const [ins, cs, vs] = await Promise.all([
+      getDocs(collection(db, "invitados")),
+      getDocs(collection(db, "canciones")),
+      getDocs(collection(db, "registrosAccesos"))
+    ]);
+    setInvitados(ins.docs.map(d => ({ id: d.id, ...d.data() })));
+    setCanciones(cs.docs.map(d => d.data()));
+    setVisitas(vs.docs.map(d => ({
+      email: d.data().email,
+      fechahora: d.data().fechaHora?.toDate?.()?.toISOString() ?? 'Sin fecha'
+    })));
   };
 
   useEffect(() => {
     fetchData();
   }, []);
 
-const handleAgregarInvitado = async (e) => {
-  e.preventDefault();
-
-  // Convertir a mayúsculas y quitar espacios extra
-  const nombre = nuevoInvitado.nombre.trim().toUpperCase();
-  const apellido = nuevoInvitado.apellido.trim().toUpperCase();
-
-  if (!nombre || !apellido) return;
-
-  // Verificar si ya existe un invitado con mismo nombre y apellido
-  const yaExiste = invitados.some(
-    (inv) =>
-      inv.nombre.trim().toUpperCase() === nombre &&
-      inv.apellido.trim().toUpperCase() === apellido
-  );
-
-  if (yaExiste) {
-    setMensaje('❌ El invitado ya existe.');
+  const guardarCambios = async inv => {
+    await updateDoc(doc(db, 'invitados', inv.id), inv);
+    setMensaje('✅ Cambios guardados.');
     setTimeout(() => setMensaje(''), 3000);
-    return;
-  }
-
-  const invitadoFormateado = {
-    ...nuevoInvitado,
-    nombre,
-    apellido,
-  };
-
-  await addDoc(collection(db, "invitados"), invitadoFormateado);
-
-  setNuevoInvitado({ nombre: '', apellido: '', estado: 'Sin confirmar', comida: 'No necesita', confirmado: 0 });
-  fetchData();
-  setMensaje('✅ Invitado agregado correctamente.');
-  setTimeout(() => setMensaje(''), 10000);
-};
-
-  const actualizarCampo = (id, campo, valor) => {
-    setInvitados((prev) =>
-      prev.map((inv) => (inv.id === id ? { ...inv, [campo]: valor } : inv))
-    );
-  };
-
-  const guardarCambios = async (invitado) => {
-    try {
-      await updateDoc(doc(db, 'invitados', invitado.id), {
-        nombre: invitado.nombre,
-        apellido: invitado.apellido,
-        estado: invitado.estado,
-        comida: invitado.comida,
-        confirmado: invitado.confirmado
-      });
-      setMensaje('✅ Cambios guardados.');
-      setTimeout(() => setMensaje(''), 3000);
-    } catch (error) {
-      console.error(error);
-      setMensaje('❌ Error al guardar cambios.');
-      setTimeout(() => setMensaje(''), 3000);
-    }
-  };
-
-  const eliminarInvitado = async (id) => {
-  try {
-    await deleteDoc(doc(db, "invitados", id));
-    setMensaje('Invitado eliminado correctamente.');
     fetchData();
+  };
+
+  const eliminarInvitado = async id => {
+    await deleteDoc(doc(db, "invitados", id));
+    setMensaje('✅ Invitado eliminado.');
     setTimeout(() => setMensaje(''), 3000);
-  } catch (error) {
-    console.error(error);
-    setMensaje('Error al eliminar invitado.');
+    fetchData();
+  };
+
+  const handleAgregar = async e => {
+    e.preventDefault();
+    const nm = nuevoInvitado.nombre.trim().toUpperCase();
+    const ap = nuevoInvitado.apellido.trim().toUpperCase();
+    if (!nm || !ap) return;
+    const existe = invitados.some(i => i.nombre === nm && i.apellido === ap);
+    if (existe) { setMensaje('❌ Ya existe.'); return; }
+    await addDoc(collection(db, "invitados"), { ...nuevoInvitado, nombre: nm, apellido: ap });
+    setNuevoInvitado({
+      nombre: '',
+      apellido: '',
+      estado: 'Sin confirmar',
+      comida: 'No necesita',
+      confirmado: 0
+    });
+    setMensaje('✅ Invitado agregado.');
     setTimeout(() => setMensaje(''), 3000);
-  }
-};
+    fetchData();
+  };
 
   const exportToExcel = (data, filename) => {
     const ws = XLSX.utils.json_to_sheet(data);
     const wb = XLSX.utils.book_new();
-    XLSX.utils.book_append_sheet(wb, ws, "Datos");
+    XLSX.utils.book_append_sheet(wb, ws, "datos");
     XLSX.writeFile(wb, filename);
   };
 
   return (
     <div className="main-container">
       <Navbar />
-      <div className="main-content"></div>
       <div className="admin-container">
-        <h1>Admin - Invitados</h1>
+        {mensaje && <p className="mensaje">{mensaje}</p>}
 
-        {mensaje && <p className={`mensaje ${mensaje.tipo}`}>{mensaje.texto}</p>}
-
-        <form onSubmit={handleAgregarInvitado} className="form-agregar">
+        {/* Invitados */}
+        <h2>Invitados</h2>
+        <form onSubmit={handleAgregar} className="form-agregar">
           <input
             type="text"
             placeholder="Nombre"
             value={nuevoInvitado.nombre}
-            onChange={(e) => setNuevoInvitado({ ...nuevoInvitado, nombre: e.target.value })}
+            onChange={e => setNuevoInvitado({ ...nuevoInvitado, nombre: e.target.value })}
           />
           <input
             type="text"
             placeholder="Apellido"
             value={nuevoInvitado.apellido}
-            onChange={(e) => setNuevoInvitado({ ...nuevoInvitado, apellido: e.target.value })}
+            onChange={e => setNuevoInvitado({ ...nuevoInvitado, apellido: e.target.value })}
           />
           <select
             value={nuevoInvitado.estado}
-            onChange={(e) => setNuevoInvitado({ ...nuevoInvitado, estado: e.target.value })}
+            onChange={e => setNuevoInvitado({ ...nuevoInvitado, estado: e.target.value })}
           >
-            {estados.map((estado) => (
-              <option key={estado} value={estado}>{estado}</option>
-            ))}
+            {estados.map(s => <option key={s}>{s}</option>)}
           </select>
           <select
             value={nuevoInvitado.comida}
-            onChange={(e) => setNuevoInvitado({ ...nuevoInvitado, comida: e.target.value })}
+            onChange={e => setNuevoInvitado({ ...nuevoInvitado, comida: e.target.value })}
           >
-            {comidas.map((comida) => (
-              <option key={comida} value={comida}>{comida}</option>
-            ))}
+            {comidas.map(s => <option key={s}>{s}</option>)}
           </select>
           <button type="submit" className="admin-button">Agregar Invitado</button>
         </form>
@@ -169,105 +133,103 @@ const handleAgregarInvitado = async (e) => {
         <div className="admin-table-container">
           <table className="admin-table">
             <thead>
-                <tr>
+              <tr>
                 <th>Nombre</th>
                 <th>Apellido</th>
                 <th>Estado</th>
                 <th>Comida</th>
-                <th>¿Ya confirmo?</th>
+                <th>Confirmó</th>
                 <th>Acción</th>
-                </tr>
+              </tr>
             </thead>
             <tbody>
-                {invitados.map((inv) => (
+              {invitados.slice((pagInv-1)*filasPorPagina, pagInv*filasPorPagina)
+                .map(inv => (
                 <tr key={inv.id}>
-                    <td>
-                    <input
-                        type="text"
-                        value={inv.nombre}
-                        onChange={(e) => actualizarCampo(inv.id, 'nombre', e.target.value)}
-                    />
-                    </td>
-                    <td>
-                    <input
-                        type="text"
-                        value={inv.apellido}
-                        onChange={(e) => actualizarCampo(inv.id, 'apellido', e.target.value)}
-                    />
-                    </td>
-                    <td>
-                    <select
-                        value={inv.estado}
-                        onChange={(e) => actualizarCampo(inv.id, 'estado', e.target.value)}
-                    >
-                        {estados.map((estado) => (
-                        <option key={estado} value={estado}>
-                            {estado}
-                        </option>
-                        ))}
+                  <td><input value={inv.nombre} onChange={e => (inv.nombre = e.target.value)} /></td>
+                  <td><input value={inv.apellido} onChange={e => (inv.apellido = e.target.value)} /></td>
+                  <td>
+                    <select value={inv.estado} onChange={e => (inv.estado = e.target.value)}>
+                      {estados.map(s => <option key={s}>{s}</option>)}
                     </select>
-                    </td>
-                    <td>
-                    <select
-                        value={inv.comida}
-                        onChange={(e) => actualizarCampo(inv.id, 'comida', e.target.value)}
-                    >
-                        {comidas.map((comida) => (
-                        <option key={comida} value={comida}>
-                            {comida}
-                        </option>
-                        ))}
+                  </td>
+                  <td>
+                    <select value={inv.comida} onChange={e => (inv.comida = e.target.value)}>
+                      {comidas.map(s => <option key={s}>{s}</option>)}
                     </select>
-                    </td>
-                    <td>
-                    <select
-                        value={inv.confirmado}
-                        onChange={(e) => actualizarCampo(inv.id, 'confirmado', Number(e.target.value))}
-                    >
-                        <option value={0}>No</option>
-                        <option value={1}>Sí</option>
+                  </td>
+                  <td>
+                    <select value={inv.confirmado} onChange={e=> inv.confirmado = Number(e.target.value)}>
+                      <option value={0}>No</option>
+                      <option value={1}>Sí</option>
                     </select>
-                    </td>
-                    <td>
-                    <button title="Guardar" onClick={() => guardarCambios(inv)} className="icon-button">
-                        <FontAwesomeIcon icon={faSave} />
+                  </td>
+                  <td>
+                    <button onClick={()=>guardarCambios(inv)} className="icon-button">
+                      <FontAwesomeIcon icon={faSave} />
                     </button>
-                    <button title="Eliminar" onClick={() => eliminarInvitado(inv.id)} className="icon-button delete-button">
-                        <FontAwesomeIcon icon={faTrash} />
+                    <button onClick={()=>eliminarInvitado(inv.id)} className="icon-button delete-button">
+                      <FontAwesomeIcon icon={faTrash} />
                     </button>
-                    </td>
+                  </td>
                 </tr>
-                ))}
+              ))}
             </tbody>
           </table>
+          <div className="paginacion">
+            <button disabled={pagInv===1} onClick={()=>setPagInv(p=>p-1)}>Anterior</button>
+            <span>Página {pagInv}</span>
+            <button disabled={pagInv>= Math.ceil(invitados.length/filasPorPagina)} onClick={()=> setPagInv(p=>p+1)}>Siguiente</button>
+          </div>
         </div>
-
-        <button className="admin-button" onClick={() => exportToExcel(invitados, "invitados.xlsx")}>
-          Exportar Invitados a Excel
+        <button className="admin-button" onClick={()=>exportToExcel(invitados,"invitados.xlsx")}>
+          Exportar Invitados
         </button>
 
-        <h1>Canciones Sugeridas</h1>
+        {/* Canciones */}
+        <h2>Canciones</h2>
         <div className="admin-table-container">
           <table className="admin-table">
             <thead>
               <tr><th>Título</th><th>Artista</th></tr>
             </thead>
             <tbody>
-              {canciones.map((can, i) => (
-                <tr key={i}>
-                  <td>{can.titulo}</td>
-                  <td>{can.artista}</td>
-                </tr>
+              {canciones.slice((pagCan-1)*filasPorPagina, pagCan*filasPorPagina).map((c,i)=>(
+                <tr key={i}><td>{c.titulo}</td><td>{c.artista}</td></tr>
               ))}
             </tbody>
           </table>
+          <div className="paginacion">
+            <button disabled={pagCan===1} onClick={()=>setPagCan(p=>p-1)}>Anterior</button>
+            <span>Página {pagCan}</span>
+            <button disabled={pagCan>= Math.ceil(canciones.length/filasPorPagina)} onClick={()=> setPagCan(p=>p+1)}>Siguiente</button>
+          </div>
         </div>
-        <button className="admin-button" onClick={() => exportToExcel(canciones, "canciones.xlsx")}>
-          Exportar Canciones a Excel
+        <button className="admin-button" onClick={()=>exportToExcel(canciones,"canciones.xlsx")}>
+          Exportar Canciones
+        </button>
+
+        {/* Visitas */}
+        <h2>Visitas</h2>
+        <div className="admin-table-container">
+          <table className="admin-table">
+            <thead><tr><th>Email</th><th>Fecha y Hora</th></tr></thead>
+            <tbody>
+              {visitas.slice((pagVis-1)*filasPorPagina, pagVis*filasPorPagina).map((v,i)=>(
+                <tr key={i}><td>{v.email}</td><td>{new Date(v.fechahora).toLocaleString()}</td></tr>
+              ))}
+            </tbody>
+          </table>
+          <div className="paginacion">
+            <button disabled={pagVis===1} onClick={()=>setPagVis(p=>p-1)}>Anterior</button>
+            <span>Página {pagVis}</span>
+            <button disabled={pagVis>= Math.ceil(visitas.length/filasPorPagina)} onClick={()=> setPagVis(p=>p+1)}>Siguiente</button>
+          </div>
+        </div>
+        <button className="admin-button" onClick={()=>exportToExcel(visitas,"visitas.xlsx")}>
+          Exportar Visitas
         </button>
       </div>
     </div>
   );
 }
-
-export default Admin;
