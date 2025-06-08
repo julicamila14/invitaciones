@@ -1,6 +1,7 @@
 import React, { useState } from 'react';
 import './formularioCancion.css';
 import { agregarCancion } from '../../../fireBaseConfig';
+import { serverTimestamp, Timestamp } from 'firebase/firestore';
 
 const FormularioCancion = () => {
   const [nombre, setNombre] = useState('');
@@ -21,7 +22,7 @@ const FormularioCancion = () => {
         nombre,
         cancion,
         comentario,
-        fechaHora: new Date()
+        fechaHora: serverTimestamp()
       });
 
       setMensaje(`🎶 ¡Canción enviada con éxito! Gracias, ${nombre}.`);

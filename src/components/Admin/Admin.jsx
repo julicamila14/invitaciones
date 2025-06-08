@@ -187,16 +187,28 @@ export default function Admin() {
         </button>
 
         {/* Canciones */}
-        <h2  className='titulo-admin'>Canciones</h2>
+        <h2 className='titulo-admin'>Canciones</h2>
         <div className="admin-table-container">
           <table className="admin-table">
             <thead>
-              <tr><th>Título</th><th>Artista</th></tr>
+              <tr>
+                <th>Nombre</th>
+                <th>Canción</th>
+                <th>Comentario</th>
+                <th>Fecha y Hora</th>
+              </tr>
             </thead>
             <tbody>
-              {canciones.slice((pagCan-1)*filasPorPagina, pagCan*filasPorPagina).map((c,i)=>(
-                <tr key={i}><td>{c.titulo}</td><td>{c.artista}</td></tr>
-              ))}
+              {canciones
+                .slice((pagCan - 1) * filasPorPagina, pagCan * filasPorPagina)
+                .map((c, i) => (
+                  <tr key={i}>
+                    <td>{c.nombre}</td>
+                    <td>{c.cancion}</td>
+                    <td>{c.comentario}</td>
+                    <td>{c.fechaHora ? new Date(c.fechaHora).toLocaleString() : 'Sin fecha'}</td>
+                  </tr>
+                ))}
             </tbody>
           </table>
           <div className="paginacion">
