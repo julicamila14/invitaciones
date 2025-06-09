@@ -98,7 +98,7 @@ export default function EmailVerification() {
             placeholder="Ingrese código"
             maxLength={6}
           />
-          <button onClick={handleVerifyCode}>
+          <button className="boton-animado boton-enviar" onClick={handleVerifyCode}>
             ✅ Verificar y Entrar
           </button>
         </div>

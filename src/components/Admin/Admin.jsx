@@ -3,6 +3,7 @@ import {
   collection,
   getDocs,
   updateDoc,
+  addDoc,
   doc,
   deleteDoc, query, orderBy 
 } from "firebase/firestore";
