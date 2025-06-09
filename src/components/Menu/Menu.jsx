@@ -30,10 +30,12 @@ function Navbar() {
   };
 }, []);
 
-  const goToInvitacion = () => {
-    window.location.href = '/invitacion';
-    setIsOpen(!isOpen);
+  const goToInvitacion = (seccionId) => {
+    const destino = `/invitacion${seccionId}`;
+    window.location.href = destino;
+    setIsOpen(false);
   }
+  ;
   const toggleMenu = () => setIsOpen(!isOpen);
 
   const handleLogout = async () => {
@@ -71,11 +73,11 @@ function Navbar() {
 
         <div className={`nav-menu ${isOpen ? 'open' : ''}`}>
           <ul className="nav-links">
-            <li><a href="#inicio" onClick={goToInvitacion}>Inicio</a></li>
-            <li><a href="#eventos" onClick={goToInvitacion}>Ceremonias</a></li>
-            <li><a href="#rsvp" onClick={goToInvitacion}>Confirmar asistencia</a></li>
-            <li><a href="#cancion" onClick={goToInvitacion}>Sugerir canción</a></li>
-            <li><a href="#book" onClick={goToInvitacion}>Book de fotos</a></li>
+            <li><a onClick={() => goToInvitacion('#inicio')}>Inicio</a></li>
+            <li><a onClick={() => goToInvitacion('#eventos')}>Ceremonias</a></li>
+            <li><a onClick={() => goToInvitacion('#rsvp')}>Confirmar asistencia</a></li>
+            <li><a onClick={() => goToInvitacion('#cancion')}>Sugerir canción</a></li>
+            <li><a onClick={() => goToInvitacion('#book')}>Book de fotos</a></li>
 
             {user ? (
               <>
