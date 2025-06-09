@@ -1,4 +1,8 @@
 .ceremonias-container {
+  background-image: url('/png/fondoCeremonias.gif');
+  background-size: cover;
+  background-repeat: no-repeat;
+  background-position: center;
   border: 1px solid #25415f;
   padding: 2rem;
   max-width: 400px;
@@ -17,6 +21,7 @@
   font-family: 'Helvetica Neue', sans-serif;
   color: #25415f;
   width: 100%;
+  background-position-y: bottom;
 }
 
 .ceremonias-titulo {
@@ -81,6 +86,14 @@ p {
   padding: 0.3rem 1rem;
   cursor: pointer;
   font-size: 0.9rem;
+}
+
+.info button:hover {
+  background-color: #446198;
+  color:white;
+  transform: scale(1.05);
+  transition: all 0.3s ease;
+  cursor: pointer;
 }
 
 /* Animación opcional */

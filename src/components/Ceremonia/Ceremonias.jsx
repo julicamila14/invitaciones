@@ -16,38 +16,55 @@ const Ceremonias = () => {
 
       <div className="eventos-wrapper">
         <div className="evento">
-          <div className="icono">
-            <img src="/icons/iglesia.gif" alt="Ceremonia" />
-          </div>
-          <div className="info">
-            <h3>CEREMONIA</h3>
-            <p>| 20:30 HS |</p>
-            <button>CÓMO LLEGAR</button>
-          </div>
+        <div className="icono">
+          <img src="/icons/iglesia.gif" alt="Ceremonia" />
         </div>
-
-        <div className="evento">
-          <div className="icono">
-            <img src="/icons/bola-disco.gif" alt="Fiesta" />
-          </div>
-          <div className="info">
-            <h3>FIESTA</h3>
-            <p>| 21:00 HS |</p>
+        <div className="info">
+          <h3>CEREMONIA</h3>
+          <p>| 20:30 HS |</p>
+          <a
+            href="https://maps.app.goo.gl/eU7kUyeTiLF1iJtD6"
+            target="_blank"
+            rel="noopener noreferrer"
+          >
             <button>CÓMO LLEGAR</button>
-          </div>
+          </a>
         </div>
+      </div>
 
-         <div className="evento">
-          <div className="icono">
-            <img src="/icons/civil.gif" alt="Civil" />
-          </div>
-          <div className="info">
-            <h3>CIVIL</h3>
-            <p>| 12:30 HS |</p>
+      <div className="evento">
+        <div className="icono">
+          <img src="/icons/bola-disco.gif" alt="Fiesta" />
+        </div>
+        <div className="info">
+          <h3>FIESTA</h3>
+          <p>| 21:00 HS |</p>
+          <a
+            href="https://maps.app.goo.gl/twE87jM1gDAm6RBL9"
+            target="_blank"
+            rel="noopener noreferrer"
+          >
             <button>CÓMO LLEGAR</button>
-          </div>
+          </a>
         </div>
+      </div>
 
+      <div className="evento">
+        <div className="icono">
+          <img src="/icons/civil.gif" alt="Civil" />
+        </div>
+        <div className="info">
+          <h3>CIVIL</h3>
+          <p>| 12:30 HS |</p>
+          <a
+            href="https://maps.app.goo.gl/XE2JjJY1MVy4kAmR7"
+            target="_blank"
+            rel="noopener noreferrer"
+          >
+            <button>CÓMO LLEGAR</button>
+          </a>
+        </div>
+      </div>
       </div>
     </section>
   );

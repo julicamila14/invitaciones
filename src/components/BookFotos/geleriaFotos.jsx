@@ -80,7 +80,7 @@ const GaleriaFotos = () => {
       <div className="icono"> 
         <img src="/icons/camara.gif" alt="camara" />
       </div>
-      <h2 className="galeria-titulo">📸 Galería de Momentos</h2>
+      <h2 className="galeria-titulo">Galería de Momentos</h2>
       <p className="galeria-subtitulo">Subí tus fotos por álbum y carga tus fotos ⬇️</p>
       <div className='fondos-inputs'>
       <div className='div-cargar'>
