@@ -12,6 +12,7 @@ const comidas = ['No necesita', 'Vegano', 'Sin TACC', 'Vegetariano'];
 const ConfirmarInvitacion = () => {
   const [busqueda, setBusqueda] = useState('');
   const [resultados, setResultados] = useState([]);
+  const [originales, setOriginales] = useState([]);
   const [mensaje, setMensaje] = useState('');
   const [modalVisible, setModalVisible] = useState(false);
   const [modalMensaje, setModalMensaje] = useState('');
@@ -36,7 +37,8 @@ const ConfirmarInvitacion = () => {
       }));
 
     setResultados(encontrados);
-    setPaginaActual(1); // Reiniciar a la primera página
+    setOriginales(encontrados);
+    setPaginaActual(1);
     setMensaje(encontrados.length === 0 ? 'No se encontró ningún invitado.' : '');
   };
 
@@ -46,15 +48,40 @@ const ConfirmarInvitacion = () => {
     );
   };
 
+  const hayInvitadosParaConfirmar = () => {
+    return resultados.some((inv) => {
+      const original = originales.find((o) => o.id === inv.id);
+      const modificado = original && (
+        inv.estado !== original.estado ||
+        inv.comida !== original.comida ||
+        original.confirmado !== 1
+      );
+      const estadoValido = inv.estado === 'Confirmado' || inv.estado === 'No asistiré';
+      return modificado && estadoValido;
+    });
+  };
+
   const handleEnviar = async () => {
     try {
-      for (const inv of resultados) {
+      const aConfirmar = resultados.filter((inv) => {
+        const original = originales.find((o) => o.id === inv.id);
+        const modificado = original && (
+          inv.estado !== original.estado ||
+          inv.comida !== original.comida ||
+          original.confirmado !== 1
+        );
+        const estadoValido = inv.estado === 'Confirmado' || inv.estado === 'No asistiré';
+        return modificado && estadoValido;
+      });
+
+      for (const inv of aConfirmar) {
         await updateDoc(doc(db, 'invitados', inv.id), {
           estado: inv.estado,
           comida: inv.comida,
           confirmado: 1,
         });
       }
+
       await handleBuscar();
       mostrarModalExito('✅ Confirmación enviada. ¡Gracias!');
     } catch (error) {
@@ -83,10 +110,11 @@ const ConfirmarInvitacion = () => {
 
   return (
     <section className="confirmacion-container">
-       <div className="icono">
-            <img src="/icons/mail.gif" alt="Mail" />
-          </div>
+      <div className="icono">
+        <img src="/icons/mail.gif" alt="Mail" />
+      </div>
       <h2 className="titulo">Confirmar Invitación</h2>
+
       <div className="busqueda">
         <input
           type="text"
@@ -180,7 +208,7 @@ const ConfirmarInvitacion = () => {
               <button onClick={() => setPaginaActual(paginaActual - 1)} disabled={paginaActual === 1}>
                 Anterior
               </button>
-              <span className='paginas-indicador'>
+              <span className="paginas-indicador">
                 Página {paginaActual} de {totalPaginas}
               </span>
               <button
@@ -195,10 +223,21 @@ const ConfirmarInvitacion = () => {
       )}
 
       <div>
-        {resultados.length > 0 && !resultados.every((inv) => inv.confirmado === 1) && (
-          <button className="btn-enviar" onClick={handleEnviar}>
-            Enviar confirmación
-          </button>
+        {resultados.length > 0 && (
+          <>
+            <button
+              className="btn-enviar"
+              onClick={handleEnviar}
+              disabled={!hayInvitadosParaConfirmar()}
+            >
+              Enviar confirmación
+            </button>
+            {!hayInvitadosParaConfirmar() && (
+              <p className="mensaje-advertencia">
+                ⚠️ Debe modificar al menos un invitado y seleccionar "Confirmado" o "No asistiré".
+              </p>
+            )}
+          </>
         )}
       </div>
 

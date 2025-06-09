@@ -2,8 +2,10 @@
   max-width: 420px;
   margin: 40px auto;
   padding: 30px 25px;
-  background: linear-gradient(-45deg, #202d45, #5b78c0, #3d4f7c, #202d45);
-  background-size: 400% 400%;
+   background-image: url('/png/form.gif');
+  background-size: cover;
+  background-repeat: no-repeat;
+  background-position: center;
   animation: email-gradient 12s ease infinite;
   border-radius: 20px;
   box-shadow: 0 8px 25px rgba(0, 0, 0, 0.2);

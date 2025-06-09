@@ -8,9 +8,9 @@ const Modal = ({ mensaje, onClose, tipo }) => {
         borderColor: isError ? '#c0392b' : '#0a3d62',
         backgroundColor: 'white'
       }}>
-        <h2 style={{ color: isError ? '#c0392b' : '#0a3d62' }}>
+        <p style={{ color: isError ? '#c0392b' : '#0a3d62' }}>
           {isError ? '❌ Error' : '✅ Éxito'}
-        </h2>
+        </p>
         <p>{mensaje}</p>
         <button onClick={onClose} style={styles.botonCerrar}>Cerrar</button>
       </div>
@@ -44,5 +44,8 @@ const styles = {
     border: 'none',
     borderRadius: 5,
     cursor: 'pointer',
+  },
+  h2: {
+    fontFamily: 'Segoe UI, Tahoma, Geneva, Verdana, sans-serif'
   }
 };

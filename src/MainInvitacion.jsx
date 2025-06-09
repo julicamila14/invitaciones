@@ -13,24 +13,29 @@ function MainInvitacion() {
   return (
     <div className="main-container">
       <Navbar />
-      <div className="main-content">
+
+      <div id="inicio" className="main-content">
         <CuentaRegresiva fechaObjetivo="2025-09-20T19:00:00" />
       </div>
-      <div className="main-ceremonias">
-      <Ceremonias/>
-      </div>
-      <div className='fondo-cancion'>
-        <FormularioCancion/>
-      </div>
-      <div>
-        <DressCode/>
-      </div>
-      <div className='fondo-cancion confirmacion-hoja'>
-        <ConfirmarInvitacion className='confirmacion-containe'/>
 
+      <div id="eventos" className="main-ceremonias">
+        <Ceremonias />
       </div>
-      <div className='fondo-cancion'>
-        <GaleriaFotos/>
+
+      <div id="cancion" className="fondo-cancion">
+        <FormularioCancion />
+      </div>
+
+      <div>
+        <DressCode />
+      </div>
+
+      <div id="rsvp" className="fondo-cancion confirmacion-hoja">
+        <ConfirmarInvitacion className='confirmacion-containe' />
+      </div>
+
+      <div id="book">
+        <GaleriaFotos />
       </div>
     </div>
   );

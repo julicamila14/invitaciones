@@ -53,8 +53,9 @@ export default function EmailVerification() {
   };
 
   const handleVerifyCode = () => {
-    if (inputCode.trim() === generatedCode) {
-      navigate('/invitacion');
+   if (inputCode.trim() === generatedCode) {
+        localStorage.setItem('accesoValido', 'true');
+        navigate('/invitacion');
     } else {
       setMessage('⚠️ El código ingresado es incorrecto.');
     }

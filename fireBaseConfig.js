@@ -1,6 +1,6 @@
 import { initializeApp } from "firebase/app";
 import { getFirestore, collection, addDoc, serverTimestamp } from "firebase/firestore";
-import { getStorage, ref, uploadBytes, getDownloadURL } from "firebase/storage";
+import { getStorage, ref, uploadBytes, getDownloadURL, deleteObject, listAll } from "firebase/storage";
 import { getAuth } from "firebase/auth";   // <--- importa getAuth
 
 const firebaseConfig = {
@@ -27,10 +27,29 @@ export const agregarInvitado = (invitado) =>
 export const agregarCancion = (cancion) =>
   addDoc(collection(db, "canciones"), cancion);
 
-export const subirFoto = async (file) => {
-  const storageRef = ref(storage, `fotos/${file.name}`);
+
+export const subirFoto = async (file, album) => {
+  const storageRef = ref(storage, `fotos/${album}/${file.name}`);
   await uploadBytes(storageRef, file);
   return await getDownloadURL(storageRef);
+};
+
+export const eliminarFoto = async (album, fileName) => {
+  const fotoRef = ref(storage, `fotos/${album}/${fileName}`);
+  await deleteObject(fotoRef);
+};
+
+export const listarFotosAlbum = async (album) => {
+  const albumRef = ref(storage, `fotos/${album}`);
+  const items = await listAll(albumRef);
+  return await Promise.all(
+    items.items.map(async (itemRef) => ({
+      id: itemRef.fullPath,
+      nombre: itemRef.name,
+      src: await getDownloadURL(itemRef),
+      album,
+    }))
+  );
 };
 
  export const registrarAcceso = async (email) => {

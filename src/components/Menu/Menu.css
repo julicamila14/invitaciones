@@ -91,13 +91,12 @@ body {
 
 .nav-links li a {
   text-decoration: none;
-  color: white;
+  color: #202d45;
   font-weight: 600;
   font-size: 1.2rem;
   transition: all 0.3s ease;
   padding: 0.75rem 1.5rem;
   border-radius: 12px;
-  background: #31456a;
   box-shadow: 2px 2px 6px rgba(0, 0, 0, 0.3);
 }
 
@@ -129,7 +128,7 @@ body {
     right: -100%;
     width: 90%;
     height: 100vh;
-    background: linear-gradient(to bottom right, #0c0c0c, #1b245f);
+    background: white;
     padding: 5rem 2rem 2rem;
     gap: 2rem;
     transition: right 0.4s ease-in-out;
@@ -154,7 +153,6 @@ body {
   .nav-links li a {
     padding: 1rem;
     width: 100%;
-    background: linear-gradient(145deg, #191d44, #2e3671);
     text-align: left;
     border-radius: 14px;
   }

@@ -7,6 +7,7 @@ import Login from './Login/Login';
 import MainInvitacion from './MainInvitacion';
 import Admin from './components/Admin/Admin';
 import EmailVerification from './Email/email';
+import RutaProtegida from './utils'; 
 
 function App() {
   const [user, setUser] = useState(undefined);
@@ -24,7 +25,14 @@ function App() {
     <BrowserRouter>
       <Routes>
         <Route path="/" element={<EmailVerification />} />
-        <Route path="/invitacion" element={<MainInvitacion />} />
+        <Route
+          path="/invitacion"
+          element={
+            <RutaProtegida>
+              <MainInvitacion />
+            </RutaProtegida>
+          }
+        />
         <Route path="/login" element={<Login />} />
         <Route path="/admin" element={user ? <Admin /> : <Navigate to="/login" />} />
       </Routes>
