@@ -56,12 +56,12 @@ const CuentaRegresiva = ({ fechaObjetivo }) => {
 
       <div className="galeria-slider">
         <Slider {...settings}>
-          <img src="/fotos/foto1.jpeg" alt="Foto 1" />
-          <img src="/fotos/foto2.jpeg" alt="Foto 2" />
-          <img src="/fotos/foto3.jpeg" alt="Foto 3" />
-          <img src="/fotos/foto4.jpeg" alt="Foto 4" />
-          <img src="/fotos/foto5.jpeg" alt="Foto 5" />
-          <img src="/fotos/foto6.jpeg" alt="Foto 6" />
+          <img src="/fotos/F1.jpeg" alt="Foto 1" />
+          <img src="/fotos/F2.jpeg" alt="Foto 2" />
+          <img src="/fotos/F4.jpeg" alt="Foto 5" />
+          <img src="/fotos/F5.jpeg" alt="Foto 4" />
+          <img src="/fotos/F6.jpeg" alt="Foto 5" />
+          <img src="/fotos/F7.jpeg" alt="Foto 6" />
         </Slider>
       </div>
     </div>

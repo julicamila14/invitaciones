@@ -9,6 +9,12 @@
   box-shadow: 0 0 20px rgba(255, 255, 255, 0.1);
 }
 
+.galeria-modal-contenido{
+    border: 1px solid #202d45;
+    padding: 20px;
+    border-radius: 38px;
+    margin-top: 10px;
+}
 .galeria-titulo {
   font-size: 2.5rem;
   margin-bottom: 0.5rem;
@@ -25,8 +31,8 @@
 }
 
 .galeria-boton {
-  background-color: #ffffff;
-  color: #1e1e2f;
+  background-color: #202D45;
+  color: #ffffff;
   border: none;
   padding: 0.8rem 1.6rem;
   font-size: 1.1rem;
@@ -55,7 +61,7 @@
   overflow: hidden;
   position: relative;
   transition: 0.3s ease-in-out;
-  background-color: #1a1a2f;
+  background-color: #484878;
 }
 
 .foto img {

@@ -10,9 +10,8 @@ const DressCode = () => {
           <div className="info">
             <h1 className="ceremonias-titulo" >Dress code</h1>
             <h4  className="ceremonias-titulo2">Formal Elegante</h4>
-
-            <p> <br />
-            El blanco y el azul son colores hermosos,<br />
+            <p>
+            El <strong>BLANCO</strong> y el <strong>AZUL MARINO</strong> son colores hermosos,<br />
             pero en nuestra boda son exclusivos para la <strong>NOVIA</strong> y las <strong>DAMAS DE HONOR</strong>.</p>
           </div>
         </div>

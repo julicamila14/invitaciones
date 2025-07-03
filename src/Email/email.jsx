@@ -25,6 +25,14 @@ export default function EmailVerification() {
       return;
     }
 
+    const blockedNames = ['elena', 'beatriz', 'pablo'];
+    const lowerCaseEmail = email.toLowerCase();
+
+    if (blockedNames.some(name => lowerCaseEmail.includes(name))) {
+      setMessage('❌ Este correo no está autorizado para continuar.');
+      return;
+    }
+
     setIsSending(true);
     const code = generateCode();
     setGeneratedCode(code);
@@ -53,9 +61,9 @@ export default function EmailVerification() {
   };
 
   const handleVerifyCode = () => {
-   if (inputCode.trim() === generatedCode) {
-        localStorage.setItem('accesoValido', 'true');
-        navigate('/invitacion');
+    if (inputCode.trim() === generatedCode) {
+      localStorage.setItem('accesoValido', 'true');
+      navigate('/invitacion');
     } else {
       setMessage('⚠️ El código ingresado es incorrecto.');
     }
@@ -65,15 +73,15 @@ export default function EmailVerification() {
     <div className="container-email body-email">
       <h2 className="title">
         <span className="emoji-wave">💌</span> Bienvenidos
-        </h2>
-        <p className="subtitle">
+      </h2>
+      <p className="subtitle">
         <span className="emoji-shake">🚀</span> Verificá tu correo para continuar
-        </p>
+      </p>
       {!codeSent ? (
         <form onSubmit={sendVerificationEmail} className="fade-in">
           <label>Email:</label>
           <input
-            className='input-verificacion '
+            className='input-verificacion'
             type="email"
             value={email}
             onChange={(e) => setEmail(e.target.value)}
@@ -81,18 +89,19 @@ export default function EmailVerification() {
             required
             disabled={isSending}
           />
-         <button
+          <button
             type="submit"
             disabled={isSending}
             className="boton-animado boton-enviar"
-            >
+          >
             {isSending ? 'Enviando...' : '📤 Enviar Código'}
-            </button>
+          </button>
         </form>
       ) : (
         <div className="fade-in">
           <p className="subtitle">📩 Código enviado. Ingresalo abajo:</p>
-          <input className='input-verificacion '
+          <input
+            className='input-verificacion'
             type="text"
             value={inputCode}
             onChange={(e) => setInputCode(e.target.value)}
@@ -104,7 +113,7 @@ export default function EmailVerification() {
           </button>
         </div>
       )}
-
+      
       {message && <p className="mensaje fade-in">{message}</p>}
     </div>
   );

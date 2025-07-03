@@ -9,6 +9,7 @@ const Ceremonias = () => {
         <img src="/icons/calendario.gif" alt="¿Cuándo?" />
         <p>¿CUÁNDO?</p>
         <p>20 DE SEPTIEMBRE 2025</p>
+    
        </div>
       </div>
 
@@ -21,7 +22,7 @@ const Ceremonias = () => {
         </div>
         <div className="info">
           <h3>CEREMONIA</h3>
-          <p>| 20:30 HS |</p>
+          <p>| 19:40 HS |</p>
           <a
             href="https://maps.app.goo.gl/eU7kUyeTiLF1iJtD6"
             target="_blank"
@@ -55,7 +56,8 @@ const Ceremonias = () => {
         </div>
         <div className="info">
           <h3>CIVIL</h3>
-          <p>| 12:30 HS |</p>
+          <p>| 19 DE SEPTIEMBRE 2025 |</p>
+          <p>| 14:30 HS |</p>
           <a
             href="https://maps.app.goo.gl/XE2JjJY1MVy4kAmR7"
             target="_blank"

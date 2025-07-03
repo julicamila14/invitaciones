@@ -1,4 +1,4 @@
-import React, { useState, useEffect } from 'react';
+import React, { useState, useEffect, useRef } from 'react';
 import './GaleriaFotos.css';
 import { listarFotosAlbum, subirFoto, eliminarFoto } from '../../../fireBaseConfig';
 
@@ -7,8 +7,11 @@ const GaleriaFotos = () => {
   const [fotos, setFotos] = useState([]);
   const [seleccionadas, setSeleccionadas] = useState([]);
   const [modalAbierto, setModalAbierto] = useState(false);
+  const [subiendo, setSubiendo] = useState(false);
+  const [mensajeSubida, setMensajeSubida] = useState('');
 
   const albums = ['Ceremonia', 'Fiesta', 'Civil'];
+  const inputFileRef = useRef(null);
 
   const cargarFotos = async (album) => {
     const fotosCargadas = await listarFotosAlbum(album);
@@ -22,12 +25,33 @@ const GaleriaFotos = () => {
     await cargarFotos(album);
   };
 
+  const handleClickSubir = () => {
+    if(inputFileRef.current) {
+      inputFileRef.current.value = null; // limpiar valor anterior
+      inputFileRef.current.click();
+    }
+  };
+
   const handleAgregarFotos = async (e) => {
     const archivos = Array.from(e.target.files);
-    for (const archivo of archivos) {
-      await subirFoto(archivo, albumSeleccionado);
+    if (archivos.length === 0) return;
+
+    setSubiendo(true);
+    setMensajeSubida('Cargando...');
+
+    try {
+      for (const archivo of archivos) {
+        await subirFoto(archivo, albumSeleccionado);
+      }
+      await cargarFotos(albumSeleccionado);
+      setMensajeSubida('Archivos subidos');
+    } catch (error) {
+      console.error(error);
+      setMensajeSubida('Ocurrió un error');
+    } finally {
+      setSubiendo(false);
+      setTimeout(() => setMensajeSubida(''), 3000);
     }
-    await cargarFotos(albumSeleccionado);
   };
 
   const toggleSeleccion = (fotoId) => {
@@ -44,14 +68,15 @@ const GaleriaFotos = () => {
     await cargarFotos(albumSeleccionado);
   };
 
+  const abrirFotoEnNuevaPestania = (foto) => {
+    window.open(foto.src, '_blank', 'noopener,noreferrer');
+  };
+
   const handleDescargarSeleccionadas = () => {
     seleccionadas.forEach((id) => {
       const foto = fotos.find((f) => f.id === id);
       if (foto) {
-        const a = document.createElement('a');
-        a.href = foto.src;
-        a.download = foto.nombre;
-        a.click();
+        abrirFotoEnNuevaPestania(foto);
       }
     });
   };
@@ -59,13 +84,6 @@ const GaleriaFotos = () => {
   const eliminarUnaFoto = async (foto) => {
     await eliminarFoto(foto.album, foto.nombre);
     await cargarFotos(albumSeleccionado);
-  };
-
-  const descargarFoto = (foto) => {
-    const a = document.createElement('a');
-    a.href = foto.src;
-    a.download = foto.nombre;
-    a.click();
   };
 
   useEffect(() => {
@@ -82,24 +100,38 @@ const GaleriaFotos = () => {
       </div>
       <h2 className="galeria-titulo">Galería de Momentos</h2>
       <p className="galeria-subtitulo">Subí tus fotos por álbum y carga tus fotos ⬇️</p>
+
       <div className='fondos-inputs'>
-      <div className='div-cargar'>
-      <select className='galeria-select' value={albumSeleccionado} onChange={handleCambiarAlbum}>
-        {albums.map((album) => (
-          <option key={album} value={album}>{album}</option>
-        ))}
-      </select>
+        <div className='div-cargar'>
+          <select className='galeria-select' value={albumSeleccionado} onChange={handleCambiarAlbum}>
+            {albums.map((album) => (
+              <option key={album} value={album}>{album}</option>
+            ))}
+          </select>
+        </div>
+
+        <div className='div-cargarfotos'>
+          <input
+            type="file"
+            accept="image/*"
+            multiple
+            onChange={handleAgregarFotos}
+            ref={inputFileRef}
+            style={{ display: 'none' }}
+            disabled={subiendo}
+          />
+          <button
+            className="galeria-boton"         
+            onClick={handleClickSubir}
+            disabled={subiendo}
+          >
+            Subir archivos
+          </button>
+        </div>
       </div>
-      <div className='div-cargarfotos'>
-      <input 
-        type="file"
-        accept="image/*"
-        multiple
-        onChange={handleAgregarFotos}
-        className="galeria-input"
-      />
-      </div>
-      </div>
+
+      {mensajeSubida && <p className="mensaje-subida">{mensajeSubida}</p>}
+
       {fotos.length > 0 && (
         <>
           <button className="galeria-boton" onClick={abrirModal}>📖 Ver Book</button>
@@ -109,14 +141,11 @@ const GaleriaFotos = () => {
       {modalAbierto && (
         <div className="galeria-modal">
           <div className="galeria-modal-contenido">
-            <button className="cerrar-modal" onClick={cerrarModal}>✖</button>
+            <button className="cerrar-modal galeria-boton " onClick={cerrarModal}>Salir</button>
 
             <div className="galeria-acciones-grupales">
               <button onClick={handleEliminarSeleccionadas} disabled={!seleccionadas.length}>
-                🗑 Eliminar seleccionadas
-              </button>
-              <button onClick={handleDescargarSeleccionadas} disabled={!seleccionadas.length}>
-                ⬇️ Descargar seleccionadas
+               ❌ Eliminar Seleccionados
               </button>
             </div>
 
@@ -133,8 +162,8 @@ const GaleriaFotos = () => {
                       className="foto-imagen"
                     />
                     <div className="foto-iconos">
-                      <button onClick={(e) => { e.stopPropagation(); descargarFoto(foto); }}>⬇️</button>
-                      <button onClick={(e) => { e.stopPropagation(); eliminarUnaFoto(foto); }}>🗑</button>
+                      <button onClick={(e) => { e.stopPropagation(); abrirFotoEnNuevaPestania(foto); }}>🔎</button>
+                      <button onClick={(e) => { e.stopPropagation(); eliminarUnaFoto(foto); }}>❌</button>
                     </div>
                   </div>
                 </div>
