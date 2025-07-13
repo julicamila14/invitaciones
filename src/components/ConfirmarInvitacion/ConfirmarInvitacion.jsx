@@ -24,10 +24,12 @@ const ConfirmarInvitacion = () => {
     const invitadosRef = collection(db, 'invitados');
     const snapshot = await getDocs(invitadosRef);
 
+    const normalizarTexto = (texto) =>
+      texto.toLowerCase().normalize("NFD").replace(/\s+/g, ' ').trim();
     const encontrados = snapshot.docs
       .map((docSnap) => ({ id: docSnap.id, ...docSnap.data() }))
-      .filter((i) =>
-        `${i.nombre} ${i.apellido}`.toLowerCase().includes(busqueda.toLowerCase())
+     .filter((i) =>
+      normalizarTexto(`${i.nombre} ${i.apellido}`).includes(normalizarTexto(busqueda))
       )
       .map((i) => ({
         ...i,

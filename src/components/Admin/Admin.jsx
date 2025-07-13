@@ -189,7 +189,7 @@ export default function Admin() {
           </table>
           <div className="paginacion">
             <button className="admin-button" disabled={pagInv===1} onClick={()=>setPagInv(p=>p-1)}>Anterior</button>
-            <span  className='titulo-admin'>Página {pagInv}</span>
+            <span  className='paginas'>Página {pagInv}</span>
             <button  className="admin-button" disabled={pagInv>= Math.ceil(invitados.length/filasPorPagina)} onClick={()=> setPagInv(p=>p+1)}>Siguiente</button>
           </div>
         </div>
@@ -230,7 +230,7 @@ export default function Admin() {
           </table>
           <div className="paginacion">
             <button  className="admin-button" disabled={pagCan===1} onClick={()=>setPagCan(p=>p-1)}>Anterior</button>
-            <span  className='titulo-admin'>Página {pagCan}</span>
+            <span  className='paginas'>Página {pagCan}</span>
             <button  className="admin-button" disabled={pagCan>= Math.ceil(canciones.length/filasPorPagina)} onClick={()=> setPagCan(p=>p+1)}>Siguiente</button>
           </div>
         </div>
@@ -251,7 +251,7 @@ export default function Admin() {
           </table>
           <div  className="paginacion">
             <button  className="admin-button" disabled={pagVis===1} onClick={()=>setPagVis(p=>p-1)}>Anterior</button>
-            <span  className='titulo-admin'>Página {pagVis}</span>
+            <span  className='paginas'>Página {pagVis}</span>
             <button  className="admin-button" disabled={pagVis>= Math.ceil(visitas.length/filasPorPagina)} onClick={()=> setPagVis(p=>p+1)}>Siguiente</button>
           </div>
         </div>
