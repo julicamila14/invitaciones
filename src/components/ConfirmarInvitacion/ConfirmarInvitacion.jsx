@@ -118,7 +118,7 @@ const ConfirmarInvitacion = () => {
       <div className="busqueda">
         <input
           type="text"
-          placeholder="Buscar por nombre y apellido"
+          placeholder="Buscar por nombre o apellido"
           value={busqueda}
           onChange={(e) => setBusqueda(e.target.value)}
         />
